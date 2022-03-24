@@ -1,0 +1,24 @@
+{
+    "name": "agenter-labs/pdf",
+    "description": "Extended FPDF",
+    "keywords": [
+        "fpdf",
+        "pdf",
+        "php"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abdulla",
+            "email": "dev@agenter.com",
+            "homepage": "https://agenter.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "AgenterLab\\PDF\\": "./src"
+        }
+    },
+    "prefer-stable": true
+}
