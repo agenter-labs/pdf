@@ -1,6 +1,7 @@
 <?php
 
-include dirname(__FILE__).'/vendor/autoload.php';
+$dir = dirname(__FILE__);
+include $dir.'/../vendor/autoload.php';
 
 class PDF extends \AgenterLab\PDF\PDF {
 
@@ -9,8 +10,8 @@ class PDF extends \AgenterLab\PDF\PDF {
     {
         // Position at 1.5 cm from bottom
         $this->SetY(-11);
-        // Arial italic 8
-        $this->SetFont('Arial','I',8);
+        // ubuntu italic 8
+        $this->SetFont('ubuntu','I',8);
         // Page number
         $this->Cell(0,10,'Page '.$this->PageNo(),0,0,'C');
 
@@ -99,14 +100,17 @@ for ($i = 1; $i <= $itemSize; $i++) {
 $taxCategories = ['CGST', 'SGST'];
 
 $pdf = new PDF();
+$pdf->AddFont('ubuntu');
+$pdf->AddFont('ubuntu','I');
+$pdf->AddFont('ubuntu','B');
 $pdf->AddPage();
 
 // Header
 $pdf->SetMargins(4,4);
-$pdf->SetFont('Arial');
+$pdf->SetFont('ubuntu');
 
 $pdf->moveX(0);
-$pdf->Image('./logo.png', null, 2, $pdf->getColW(3));
+$pdf->Image($dir . '/logo.png', null, 2, $pdf->getColW(3));
 $pdf->moveX(3);
 $pdf->moveY(0);
 $pdf->MultiCell($pdf->getColW(6), 5, implode("\n", [
@@ -115,7 +119,7 @@ $pdf->MultiCell($pdf->getColW(6), 5, implode("\n", [
     'India'
 ]), 0, 2);
 
-$pdf->SetFont('Arial', 'B');
+$pdf->SetFont('ubuntu', 'B');
 $pdf->moveX(3);
 $pdf->Cell(0,5,'32AABCU9603R1ZW');
 
@@ -139,7 +143,7 @@ $pdf->Cell(0,6,'Payment Due:', 0, 2);
 
 $pdf->SetY($y);
 $pdf->moveX(3);
-$pdf->SetFont('Arial');
+$pdf->SetFont('ubuntu');
 $pdf->Cell(0,6,'INV-00003', 0, 2);
 $pdf->Cell(0,6,'17 Mar 2022', 0, 2);
 $pdf->Cell(0,6,'32AABCU9603R1ZW', 0, 2);
@@ -163,18 +167,18 @@ $pdf->hr(0.1, 2);
 // ADDRESS
 $pdf->SetFillColor(201, 197, 197);
 $y = $pdf->GetY();
-$pdf->SetFont('Arial', 'B');
+$pdf->SetFont('ubuntu', 'B');
 $pdf->Cell($pdf->getColW(6), 8,'Bill To',0,2,'L', true);
 $pdf->Cell(0,6,'Nadapuram', 0, 2);
-$pdf->SetFont('Arial');
+$pdf->SetFont('ubuntu');
 $pdf->MultiCell($pdf->getColW(6),5, implode("\n", $billingAddress), 0, 2);
 
 $pdf->moveX(6);
 $pdf->SetY($y, false);
-$pdf->SetFont('Arial', 'B');
+$pdf->SetFont('ubuntu', 'B');
 $pdf->Cell($pdf->getColW(6), 8,'Shipp To',0,2,'L', true);
 $pdf->Cell(0,6,'Nadapuram', 0, 2);
-$pdf->SetFont('Arial');
+$pdf->SetFont('ubuntu');
 $pdf->MultiCell($pdf->getColW(6),5, implode("\n", $shippingAddress), 0, 2);
 
 $y2 = $pdf->GetY();
@@ -223,9 +227,9 @@ $y = $pdf->GetY();
 $pdf->moveY(10, true);
 $pdf->SetFontSize(12);
 $pdf->Cell(0,4,'Total in words', 0, 2);
-$pdf->SetFont('Arial', 'B');
+$pdf->SetFont('ubuntu', 'B');
 $pdf->MultiCell($pdf->getColW(6),6, 'One thousand one hundred twenty rupees only', 0, 2);
-$pdf->SetFont('Arial', 'I');
+$pdf->SetFont('ubuntu', 'I');
 $pdf->Ln(2);
 $pdf->MultiCell($pdf->getColW(6),6, 'Terms of use', 0, 2);
 $pdf->MultiCell($pdf->getColW(6),6, 'Values of different types will be compared using the standard comparison rules. For instance, a non-numeric string will be compared to an int as though it were 0, but multiple non-numeric string values will be compared alphanumerically. The actual value returned will be of the original type with no conversion applied. ', 0, 2);
@@ -233,13 +237,13 @@ $y1 = $pdf->GetY();
 
 $pdf->SetY($y);
 $pdf->moveX(8);
-$pdf->SetFont('Arial', 'B');
+$pdf->SetFont('ubuntu', 'B');
 $pdf->Cell(0,8,'Sub Toal:', 0, 2);
 $pdf->Cell(0,8,'Toal:', 0, 2);
 $pdf->Cell(0,8,'Balance Due:', 0, 2);
 
 $pdf->SetY($y);
-$pdf->SetFont('Arial');
+$pdf->SetFont('ubuntu');
 $pdf->Cell(0,8,'1,000.00', 0, 2, 'R');
 $pdf->Cell(0,8,'1,120.00', 0, 2, 'R');
 $pdf->Cell(0,8,'300.00', 0, 2, 'R');
@@ -247,7 +251,7 @@ $pdf->Cell(0,8,'300.00', 0, 2, 'R');
 $pdf->Ln(3);
 $pdf->Rect($pdf->getColW(9), $pdf->GetY(), $pdf->getColW(3), 15,'D');
 
-$pdf->Image('./signature.png', $pdf->moveX(9), $pdf->GetY(), $pdf->getColW(2.5));
+$pdf->Image($dir . '/signature.png', $pdf->moveX(9), $pdf->GetY(), $pdf->getColW(2.5));
 
 $pdf->moveY(15, true);
 $pdf->moveX(8);
