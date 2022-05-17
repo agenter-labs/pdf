@@ -154,4 +154,15 @@ class PDF extends FPDF {
     {
         $this->SetX($this->GetX() + $x);
     }
+
+    /**
+     * @param \Picqer\Barcode\Barcode $barcode
+     * @param $widthFactor (int) Minimum width of a single bar in user units.
+     * @param $height (int) Height of barcode in user units.
+     * @param $foregroundColor (string) Foreground color (in SVG format) for bar elements (background is transparent)..
+     */
+    public function Barcode(\Picqer\Barcode\Barcode $barcode, int $widthFactor = 2, int $height = 30, string $foregroundColor = 'black')
+    {
+
+    }
 }
