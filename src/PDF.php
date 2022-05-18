@@ -155,14 +155,44 @@ class PDF extends FPDF {
         $this->SetX($this->GetX() + $x);
     }
 
-    /**
+     /**
      * @param \Picqer\Barcode\Barcode $barcode
      * @param $widthFactor (int) Minimum width of a single bar in user units.
      * @param $height (int) Height of barcode in user units.
      * @param $foregroundColor (string) Foreground color (in SVG format) for bar elements (background is transparent)..
      */
-    public function Barcode(\Picqer\Barcode\Barcode $barcode, int $widthFactor = 2, int $height = 30, string $foregroundColor = 'black')
+    public function Barcode(\Picqer\Barcode\Barcode $barcode, int $width = 0, int $height = 30, bool $showlabel = true,  array $fill = [0, 0, 0])
     {
+        
+       
+        $widthFactor = 1;
+        if ($width > 0) {
+            $widthFactor = $width/96;
+        }
+
+        $x = $this->x;
+        $y = 0;
+        $this->SetFillColor(...$fill);
+        
+        foreach ($barcode->getBars() as $bar) {
+
+            $w = round(($bar->getWidth() * $widthFactor), 3);
+            $h = round(($bar->getHeight() * $height / $barcode->getHeight()), 3);
+            
+            if ($bar->isBar() && $w > 0) {
+                $this->Rect($x, $this->y, $w, $h, 'F'); 
+
+                $y = $h > $y ? $h : $y;
+            }
+
+            $x += $w;
+        }
+        
+        if($showlabel) {
+            $width = round(($barcode->getWidth() * $widthFactor), 3);
+            $this->SetY($this->y + $y, false);
+            $this->Cell($width, 5, $barcode->getBarcode(), 0,2,'C');  
+        }
 
     }
 }
