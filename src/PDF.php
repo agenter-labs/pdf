@@ -2,7 +2,7 @@
 
 namespace AgenterLab\PDF;
 
-class PDF extends FPDF {
+class PDF extends TFPDF {
 
 
     /**
@@ -64,7 +64,7 @@ class PDF extends FPDF {
     /**
      * Move to X axis
      */
-    public function moveX(int $col, $padding = 0) {
+    public function moveX(float $col, $padding = 0) {
         $x = $this->getColW($col);
         $this->SetX($this->lMargin + $x + $padding);
     }
@@ -72,7 +72,7 @@ class PDF extends FPDF {
     /**
      * Get column size
      */
-    public function getColW(int $col) {
+    public function getColW(float $col) {
         return ($this->availablePageWidth() / $this->gridSize) * $col;
     }
 

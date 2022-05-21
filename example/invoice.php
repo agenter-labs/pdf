@@ -81,7 +81,7 @@ for ($i = 1; $i <= $itemSize; $i++) {
         'description' => 'Teak wooden ' . $i,
         'quantity' => $i,
         'price' => '$13,750.00',
-        'total' => '$1,3850.85',
+        'total' => '₹1,3850.85',
         'taxes' => [
             [
                 'name' => 'CGST',
@@ -100,9 +100,10 @@ for ($i = 1; $i <= $itemSize; $i++) {
 $taxCategories = ['CGST', 'SGST'];
 
 $pdf = new PDF();
-$pdf->AddFont('ubuntu');
-$pdf->AddFont('ubuntu','I');
-$pdf->AddFont('ubuntu','B');
+$pdf->AddFont('ubuntu', '', 'Ubuntu-Regular.ttf', true);
+$pdf->AddFont('ubuntu','I', 'Ubuntu-Italic.ttf', true);
+$pdf->AddFont('ubuntu','B', 'Ubuntu-Bold.ttf', true);
+$pdf->AddFont('ubuntu','BI', 'Ubuntu-BoldItalic.ttf', true);
 $pdf->AddPage();
 
 // Header
