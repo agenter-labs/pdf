@@ -195,4 +195,79 @@ class PDF extends TFPDF {
         }
 
     }
+
+    /**
+     * QrCode
+     */
+    public function QrCode(
+        \BaconQrCode\Encoder\QrCode $qrCode,
+        int $size = 40,
+        float $margin = 2,
+        array $background=[255,255,255], 
+        array $color=[0,0,0]
+    )
+    {
+        $matrix = $qrCode->getMatrix();
+        $matrixSize = $matrix->getWidth();
+
+        if ($matrixSize !== $matrix->getHeight()) {
+            throw new \InvalidArgumentException('Matrix must have the same width and height');
+        }
+
+        $rows = $matrix->getArray()->toArray();
+
+        if (0 !== $matrixSize % 2) {
+            $rows[] = array_fill(0, $matrixSize, 0);
+        }
+
+        $s = $size/$matrixSize;
+
+        $ox = $this->x + $margin;
+        $oy = $y = $this->y + $margin;
+
+        $this->SetFillColor(...$background);
+        $this->Rect($ox, $oy, $matrixSize, $matrixSize, 'F');
+        $this->SetFillColor(...$color);
+  
+        for ($i = 0; $i < $matrixSize; $i += 2) {
+
+            $upperRow = $rows[$i];
+            $lowerRow = $rows[$i + 1];
+
+            $x = $ox;
+            $nl = true;
+            for ($j = 0; $j < $matrixSize; ++$j) {
+                $upperBit = $upperRow[$j];
+                $lowerBit = $lowerRow[$j];
+
+                if ($upperBit) {
+                    $result = $lowerBit ? 'F' : 'U';
+                } else {
+                    $result = $lowerBit ? 'L' : 'E';
+                }
+
+                $this->drawQrBlock($result, $x, $y, $s);
+                $x += ($s/2);
+            }
+
+            $y += $s;
+        }
+    }
+
+    public function drawQrBlock(string $blockType, $x, $y, float $size) {
+
+        if ($blockType == 'E') {
+            return;
+        }
+        
+        $w = $h = $size;
+        if ($blockType == 'U') {
+            $h = $h/2;
+        } else if ($blockType == 'L') {
+            $h = $h/2;
+            $y += $h; 
+        }
+
+        $this->Rect($x, $y, $w/2, $h, 'F');
+    }
 }

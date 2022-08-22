@@ -53,7 +53,7 @@ class PDF extends \AgenterLab\PDF\PDF {
         $this->endLine(2);
     }
 }
-$itemSize = 35;
+$itemSize = 30;
 $billingAddress = [
     'Agenter Technologies PRivate limited Agenter Technologies Private limited',
     'Nadapuram',
@@ -259,6 +259,9 @@ $pdf->moveX(8);
 $pdf->Cell($pdf->getColW(4),4,'Authorized Signature', 0, 2, 'C');
 
 $y1 = $y1 > $pdf->GetY() ? $y1 : $pdf->GetY();
+$pdf->Ln(30);
+$qrCode = (new \AgenterLab\PDF\QrCodeGenerator())->get('abl@uco');
+$pdf->QrCode($qrCode);
 
 $pdf->SetY($y);
 $pdf->moveX(7);

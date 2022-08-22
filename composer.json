@@ -20,5 +20,8 @@
             "AgenterLab\\PDF\\": "./src"
         }
     },
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require": {
+        "bacon/bacon-qr-code": "^2.0"
+    }
 }
