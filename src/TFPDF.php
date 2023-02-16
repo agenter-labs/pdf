@@ -164,8 +164,8 @@ function __construct($orientation='P', $unit='mm', $size='A4')
 	// Line width (0.2 mm)
 	$this->LineWidth = .567/$this->k;
 	// Automatic page break
-	$this->SetAutoPageBreak(true,2*$margin);
-	// Default display mode
+	$this->SetAutoPageBreak(true,$this->bMargin);
+	// Default displaySetAutoPageBreak mode
 	$this->SetDisplayMode('default');
 	// Enable compression
 	$this->SetCompression(true);
@@ -173,13 +173,16 @@ function __construct($orientation='P', $unit='mm', $size='A4')
 	$this->PDFVersion = '1.3';
 }
 
-function SetMargins($left, $top, $right=null)
+function SetMargins($left, $top, $right=null, $bottom=null)
 {
 	// Set left, top and right margins
 	$this->lMargin = $left;
 	$this->tMargin = $top;
 	if($right===null)
 		$right = $left;
+	if($bottom===null)
+		$bottom = $top;
+	$this->bMargin = $bottom;
 	$this->rMargin = $right;
 }
 
@@ -2374,4 +2377,3 @@ protected function UTF8StringToArray($str) {
 
 
 }
-?>
