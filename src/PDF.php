@@ -6,21 +6,28 @@ class PDF extends TFPDF {
 
 
     /**
-     * @var array
+     * @var int
      */
-    private $_ys = [];    
-    
-    /**
-    * @var int
-    */
-   private $_activePage;
-
-   /**
-   * @var float
-   */
-  private $_activeY;
+    protected int $previousPage = 0;
 
     /**
+     * @var float current y positions
+     */
+    protected float $_yPos = 0;
+
+    /**
+     * @var float max y positions
+     */
+    protected float $_yMax = 0;
+
+    /**
+     * @var float header y positions
+     */
+    protected float $_yHeaderPos = 0;
+
+    /**
+     * @deprecated 
+     * @version 0.0.3
      * @var int
      */
     protected $gridSize = 12; 
@@ -33,25 +40,47 @@ class PDF extends TFPDF {
     }
 
     public function initLine() {
-        $this->_activeY = $this->y;
-        $this->_ys = [$this->_activeY];
-        $this->_activePage = $this->PageNo();
+        $this->previousPage = $this->PageNo();
+        $this->_yPos = $this->y;
+        $this->_yMax = $this->y;
     }
 
     public function adjustLine() {
 
-        if ($this->_activePage == $this->PageNo()) {
-            $this->_ys[] = $this->GetY();
+        if ($this->previousPage == $this->PageNo()) {
+            if ($this->y > $this->_yMax) {
+                $this->_yMax = $this->y;
+            }
         } else {
-            $this->_activeY = $this->tMargin;
-            $this->_ys = [$this->y];
-            $this->_activePage = $this->PageNo();
+            $this->initLine();
+            $this->_yPos = $this->tMargin + $this->_yHeaderPos;
+            $this->_yMax = $this->tMargin + $this->_yHeaderPos;
         }
-        $this->SetY($this->_activeY, false);
+
+        $this->SetY($this->_yPos, false);
     }
 
+    public function clearLine(bool $separator = false, float $padding = 0) {
+        $this->SetY($this->_yMax, false);
+
+        if ($padding) {
+            $this->Ln($padding/2);
+        }
+
+        if ($separator) {
+            $this->Line($this->lMargin, $this->y, $this->w - $this->rMargin, $this->y);
+        }
+        if ($padding) {
+            $this->Ln($padding/2);
+        }
+    }
+
+    /**
+     * @deprecated use clearLine
+     * @version 0.0.3
+     */
     public function endLine($margin = 0) {
-        $this->SetY(max($this->_ys) + $margin);
+        $this->clearLine($margin);
     }
 
     /**
