@@ -91,6 +91,13 @@ class PDF extends TFPDF {
     }
 
     /**
+     * Available width excluding margin
+     */
+    public function availablePageHeight() {
+        return $this->h - ($this->tMargin + $this->bMargin);
+    }
+
+    /**
      * Move to X axis
      */
     public function moveX(float $col, $padding = 0) {
@@ -119,21 +126,17 @@ class PDF extends TFPDF {
     /**
      * Page Border
      */
-    public function pageBorder(float $size = 0.1, array $style = []) {
+    public function pageBorder(array $style = []) {
         if ($style) {
             $this->SetFillColor(...$style);
         }
 
-        $w = $this->w - ($this->lMargin + $this->rMargin);
-        $h = $this->h - ($this->tMargin + $this->tMargin);
-
-        $this->SetXY($this->lMargin, $this->tMargin);
-        $this->hr();
-        $this->vr($h);
-        $this->SetY(-$this->tMargin);
-        $this->hr();
-        $this->SetXY(-$this->rMargin, $this->tMargin);
-        $this->vr($h);
+        $this->Rect(
+            $this->lMargin, 
+            $this->tMargin, 
+            $this->availablePageWidth(), 
+            $this->availablePageHeight()
+        );
     }
 
     /**
